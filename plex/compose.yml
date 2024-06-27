@@ -1,0 +1,42 @@
+---
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    # network_mode: host
+    ports:
+      - 32400:32400
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+      - VERSION=docker
+      - PLEX_CLAIM=${PLEX_CLAIM}
+    volumes:
+      - plex_data:/config
+      - tv:/tv
+      - movies:/movies
+      - oldies:/oldies
+      - flix:/flix
+      - musix:/musix
+    restart: always
+
+volumes:
+  plex_data:
+    name: plex_data
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./config
+  tv:
+    external: true
+  movies:
+    external: true
+  flix:
+    external: true
+  musix:
+    external: true
+  oldies:
+    external: true
