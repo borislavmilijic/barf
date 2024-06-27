@@ -18,6 +18,8 @@ services:
       - movies:/movies
       - oldies:/oldies
       - flix:/flix
+      - flix-tv:/flix-tv
+      - flix-movies:/flix-movies
       - musix:/musix
     restart: always
 
@@ -35,6 +37,10 @@ volumes:
   movies:
     external: true
   flix:
+    external: true
+  flix-tv:
+    external: true
+  flix-movies:
     external: true
   musix:
     external: true
