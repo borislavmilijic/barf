@@ -8,9 +8,13 @@ services:
       - TZ=Etc/UTC
       - CLI_ARGS= #optional
     volumes:
-      - ./config:/config
+      - duplicati_data:/config
       - /Volumes/Backups/duplicati:/backups
       - /Users/media/Projects:/source
     ports:
       - 8200:8200
     restart: always
+volumes:
+  duplicati_data:
+    external: false
+    name: duplicati_data
