@@ -5,16 +5,37 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
+      - TZ=Europe/Vienna
       - CLI_ARGS= #optional
     volumes:
       - duplicati_data:/config
-      - /Volumes/Backups/duplicati:/backups
-      - /Users/media/Projects:/source
+      - backup_target:/backups
+      - backup_source:/source
     ports:
       - 8200:8200
     restart: always
 volumes:
   duplicati_data:
-    external: false
     name: duplicati_data
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./config
+  backup_target:
+    name: backup_target
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /Volumes/Backups/duplicati
+  backup_source:
+    name: backup_source
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/media/Projects
