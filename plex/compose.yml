@@ -17,7 +17,6 @@ services:
       - tv:/tv
       - movies:/movies
       - oldies:/oldies
-      - flix:/flix
       - flix-tv:/flix-tv
       - flix-movies:/flix-movies
       - musix:/musix
@@ -35,8 +34,6 @@ volumes:
   tv:
     external: true
   movies:
-    external: true
-  flix:
     external: true
   flix-tv:
     external: true
