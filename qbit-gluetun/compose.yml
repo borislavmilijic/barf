@@ -1,0 +1,33 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun    
+    cap_add:
+      - NET_ADMIN
+    ports: #make sure to include these for qbittorrent to work
+      - 6081:6881
+      - 6081:6881/udp
+      - 6011:6011      
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      # - SERVER_CITIES=New York NY #choose any available city
+      - TZ=Europe/Vienna
+    volumes:
+      - ./config/gluetun:/gluetun
+    restart: always
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+      - WEBUI_PORT=6011
+    volumes:
+      - ./config:/config
+      - "/Volumes/Seagate External 1TB/qbit:/data"
+    network_mode: "service:gluetun"
+    restart: always
