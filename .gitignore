@@ -2,5 +2,12 @@
 **/config
 /metadata
 **/metadata
+**/library
+/library
+**/ts-*
+/ts-*
+**/postgres
+/postgres
+hwaccel.*
 .env
 .DS_Store
