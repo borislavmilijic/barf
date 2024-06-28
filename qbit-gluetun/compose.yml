@@ -16,7 +16,7 @@ services:
       # - SERVER_CITIES=New York NY #choose any available city
       - TZ=Europe/Vienna
     volumes:
-      - ./config/gluetun:/gluetun
+      - gluetun_data:/gluetun
     restart: always
   qbittorrent:
     image: linuxserver/qbittorrent:latest
@@ -27,7 +27,24 @@ services:
       - TZ=Europe/Vienna
       - WEBUI_PORT=6011
     volumes:
-      - ./config:/config
+      - qbit_data:/config
       - "/Volumes/Seagate External 1TB/qbit:/data"
     network_mode: "service:gluetun"
     restart: always
+volumes:
+  qbit_data:
+    name: qbit_data
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./config
+  gluetun_data:
+    name: gluetun_data
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./config/gluetun
