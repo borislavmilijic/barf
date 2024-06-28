@@ -1,4 +1,6 @@
 /config
 **/config
+/metadata
+**/metadata
 .env
 .DS_Store

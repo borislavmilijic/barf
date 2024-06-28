@@ -1,0 +1,34 @@
+services:    
+  audiobookshelf:
+    container_name: audiobookshelf
+    image: ghcr.io/advplyr/audiobookshelf
+    environment:
+    - AUDIOBOOKSHELF_UID=99
+    - AUDIOBOOKSHELF_GID=100
+    - TZ=Europe/Vienna
+    ports:
+    - 13378:80
+    volumes:
+    - abooks:/audiobooks
+    - ab_config:/config
+    - ab_metadata:/metadata
+    restart: always
+volumes:
+  abooks:
+    external: true
+  ab_config:
+    name: ab_config
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./config
+  ab_metadata:
+    name: ab_metadata
+    external: false
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./metadata
