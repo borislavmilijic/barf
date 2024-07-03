@@ -10,6 +10,14 @@
 /seafile-mysql
 **/postgres
 /postgres
+**/prowlarr
+/prowlarr
+**/radarr
+/radarr
+**/sonarr
+/sonarr
+**/readarr
+/readarr
 hwaccel.*
 **/.env
 .env

@@ -1,0 +1,129 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr
+    container_name: prowlarr
+    hostname: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    ports:
+      - 9696:9696 #prowlarr
+    volumes:
+      - ./prowlarr:/config
+    restart: "always"
+  
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=Europe/Vienna
+    ports:
+      - "${PORT:-8191}:8191"
+    restart: unless-stopped
+  
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr
+    container_name: sonarr
+    hostname: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    ports:
+      - 8989:8989 #sonarr
+    volumes:
+      - ./sonarr:/config
+      - tv:/data/media/tv
+      - flix-tv:/data/media/flix
+      - "/Volumes/Seagate External 1TB/qbit:/data"
+    restart: "always"
+  
+  radarr:
+    image: ghcr.io/linuxserver/radarr
+    container_name: radarr
+    hostname: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    ports:
+      - 7878:7878 #radarr
+    volumes:
+      - ./radarr:/config
+      - "/Volumes/Seagate External 1TB/qbit:/data"
+      - movies:/data/media/movies
+      - flix-movies:/data/media/flix
+    restart: "always"
+    
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    volumes:
+      - ./readarr:/config
+      - "/Volumes/Seagate External 1TB/qbit:/data"
+      - ebooks:/data/media/ebooks
+      # - /path/to/downloadclient-downloads:/downloads #optional
+    ports:
+      - 8787:8787
+    restart: "always"
+  
+  decluttarr:
+    image: ghcr.io/manimatter/decluttarr:latest
+    container_name: decluttarr
+    restart: always
+    environment:
+      - TZ=Europe/Vienna
+      - PUID=1000
+      - PGID=1000
+      ## General
+      - LOG_LEVEL=INFO
+      #- TEST_RUN=False
+      #- SSL_VERIFICATION=False
+      ## Features 
+      - REMOVE_TIMER=30
+      - REMOVE_FAILED=True
+      - REMOVE_FAILED_IMPORTS=True
+      - REMOVE_METADATA_MISSING=True
+      - REMOVE_MISSING_FILES=True     
+      - REMOVE_ORPHANS=True
+      - REMOVE_SLOW=True
+      - REMOVE_STALLED=True
+      - REMOVE_UNMONITORED=False
+      - MIN_DOWNLOAD_SPEED=100
+      - PERMITTED_ATTEMPTS=3
+      - NO_STALLED_REMOVAL_QBIT_TAG=Don't Kill
+      - IGNORE_PRIVATE_TRACKERS=True
+      - FAILED_IMPORT_MESSAGE_PATTERNS=["Not an upgrade for existing", "Not a Custom Format upgrade for existing"]
+      ## Radarr
+      - RADARR_URL=http://radarr:7878
+      - RADARR_KEY=${RADARR_KEY}
+      ## Sonarr
+      - SONARR_URL=http://sonarr:8989
+      - SONARR_KEY=${SONARR_KEY}
+      ## Readarr
+      - READARR_URL=http://readarr:8787
+      - READARR_KEY=${READARR_KEY}
+      ## qBittorrent
+      - QBITTORRENT_URL=${QBITTORRENT_URL}
+      - QBITTORRENT_USERNAME=admin
+      - QBITTORRENT_PASSWORD=${QBITTORRENT_PASSWORD}
+
+volumes:
+  tv:
+    external: true
+  movies:
+    external: true
+  flix-tv:
+    external: true
+  flix-movies:
+    external: true
+  ebooks:
+    external: true
