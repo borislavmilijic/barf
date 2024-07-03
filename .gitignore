@@ -6,8 +6,11 @@
 /library
 **/ts-*
 /ts-*
+**/seafile-mysql
+/seafile-mysql
 **/postgres
 /postgres
 hwaccel.*
+**/.env
 .env
 .DS_Store
