@@ -38,4 +38,5 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /Users/media/Projects
+      device: /Users/media/SynologyDrive/Projects
+      

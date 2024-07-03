@@ -18,6 +18,8 @@
 /sonarr
 **/readarr
 /readarr
+**/lidarr
+*mount-syn-volumes*
 hwaccel.*
 **/.env
 .env

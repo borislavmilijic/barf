@@ -39,8 +39,14 @@ services:
       - ./sonarr:/config
       - tv:/data/media/tv
       - flix-tv:/data/media/flix
-      - "/Volumes/Seagate External 1TB/qbit:/data"
+      - "/Volumes/docker/qbit-gluetun/data:/downloads"
     restart: "always"
+    # healthcheck:
+    #   test: curl --fail http://localhost:8989 || exit 1
+    #   interval: 60s
+    #   retries: 5
+    #   start_period: 20s
+    #   timeout: 10s
   
   radarr:
     image: ghcr.io/linuxserver/radarr
@@ -54,10 +60,25 @@ services:
       - 7878:7878 #radarr
     volumes:
       - ./radarr:/config
-      - "/Volumes/Seagate External 1TB/qbit:/data"
+      - "/Volumes/docker/qbit-gluetun/data:/downloads"
       - movies:/data/media/movies
       - flix-movies:/data/media/flix
     restart: "always"
+
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    volumes:
+      - ./lidarr/config:/config
+      - musix:/music #optional
+      - "/Volumes/docker/qbit-gluetun/data:/downloads" #optional
+    ports:
+      - 8686:8686
+    restart: always
     
   readarr:
     image: lscr.io/linuxserver/readarr:develop
@@ -68,9 +89,8 @@ services:
       - TZ=Europe/Vienna
     volumes:
       - ./readarr:/config
-      - "/Volumes/Seagate External 1TB/qbit:/data"
       - ebooks:/data/media/ebooks
-      # - /path/to/downloadclient-downloads:/downloads #optional
+      - "/Volumes/docker/qbit-gluetun/data:/downloads"
     ports:
       - 8787:8787
     restart: "always"
@@ -126,4 +146,6 @@ volumes:
   flix-movies:
     external: true
   ebooks:
+    external: true
+  musix:
     external: true
